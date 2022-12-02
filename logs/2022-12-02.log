@@ -5,3 +5,8 @@ time="2022-12-02 16:17:42" level=info msg="Key: 'UserService.Username' Error:Fie
 time="2022-12-02 16:17:48" level=info msg="Key: 'UserService.Username' Error:Field validation for 'Username' failed on the 'required' tag"
 time="2022-12-02 16:17:55" level=info msg="Key: 'UserService.Password' Error:Field validation for 'Password' failed on the 'required' tag"
 time="2022-12-02 16:19:40" level=info msg="Key: 'UserService.Password' Error:Field validation for 'Password' failed on the 'min' tag"
+time="2022-12-02 21:03:16" level=info msg="key is of invalid type"
+time="2022-12-02 21:09:58" level=info msg="key is of invalid type"
+time="2022-12-02 21:14:14" level=info msg="key is of invalid type"
+time="2022-12-02 21:19:53" level=info msg="key is of invalid type"
+time="2022-12-02 21:23:23" level=info msg="key is of invalid type"
