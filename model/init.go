@@ -45,4 +45,5 @@ func Database(conn string) {
 	sqlDb.SetConnMaxLifetime(time.Second * 30)
 	DB = db
 	fmt.Println("数据库连接成功")
+	migration()
 }
