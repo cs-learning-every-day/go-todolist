@@ -1,0 +1,7 @@
+time="2022-12-02 16:11:33" level=info msg="Key: 'UserService.UserName' Error:Field validation for 'UserName' failed on the 'required' tag\nKey: 'UserService.Password' Error:Field validation for 'Password' failed on the 'required' tag"
+time="2022-12-02 16:14:12" level=info msg="Error 1062: Duplicate entry 'tesla' for key 'user.username'"
+time="2022-12-02 16:16:28" level=info msg="Key: 'UserService.Username' Error:Field validation for 'Username' failed on the 'required' tag"
+time="2022-12-02 16:17:42" level=info msg="Key: 'UserService.Username' Error:Field validation for 'Username' failed on the 'required' tag"
+time="2022-12-02 16:17:48" level=info msg="Key: 'UserService.Username' Error:Field validation for 'Username' failed on the 'required' tag"
+time="2022-12-02 16:17:55" level=info msg="Key: 'UserService.Password' Error:Field validation for 'Password' failed on the 'required' tag"
+time="2022-12-02 16:19:40" level=info msg="Key: 'UserService.Password' Error:Field validation for 'Password' failed on the 'min' tag"

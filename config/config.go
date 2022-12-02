@@ -25,6 +25,10 @@ func Init() {
 		util.LogrusObj.Info("配置文件读取错误，请检查文件路径: ", err)
 		panic(err)
 	}
+	if err := LoadLocales("config/locales/zh-cn.yaml"); err != nil {
+		util.LogrusObj.Info(err) //日志内容
+		panic(err)
+	}
 	LoadServer(file)
 	LoadMysql(file)
 	path := strings.Join([]string{DbUser, ":", DbPassWord, "@tcp(", DbHost, ":", DbPort, ")/", DbName, "?charset=utf8&parseTime=true"}, "")
