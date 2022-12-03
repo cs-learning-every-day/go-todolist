@@ -22,6 +22,97 @@ type ListTaskService struct {
 	Start int `form:"start" json:"start"`
 }
 
+type DeleteTaskService struct {
+}
+
+// 更新任务的服务
+type UpdateTaskService struct {
+	ID      uint   `form:"id" json:"id"`
+	Title   string `form:"title" json:"title" binding:"required,min=2,max=100"`
+	Content string `form:"content" json:"content" binding:"max=1000"`
+	Status  int    `form:"status" json:"status"` //0 待办   1已完成
+}
+
+// 搜索任务的服务
+type SearchTaskService struct {
+	Info string `form:"info" json:"info"`
+}
+
+func (s *SearchTaskService) Search(uid uint) serializer.Response {
+	var tasks []model.Task
+	code := e.SUCCESS
+	err := model.DB.Where("uid=?", uid).Preload("User").
+		Where("title LIKE ? OR content LIKE ?",
+			"%"+s.Info+"%", "%"+s.Info+"%").Find(&tasks).Error
+	if err != nil {
+		util.LogrusObj.Info(err)
+		code = e.ErrorDatabase
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Error:  err.Error(),
+		}
+	}
+	return serializer.Response{
+		Status: code,
+		Msg:    e.GetMsg(code),
+		Data:   serializer.BuildTasks(tasks),
+	}
+}
+
+func (s *UpdateTaskService) Update(id string) serializer.Response {
+	var task model.Task
+	model.DB.Model(model.Task{}).Where("id = ?", id).First(&task)
+	task.Content = s.Content
+	task.Status = s.Status
+	task.Title = s.Title
+	code := e.SUCCESS
+	err := model.DB.Save(&task).Error
+	if err != nil {
+		util.LogrusObj.Info(err)
+		code = e.ErrorDatabase
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Error:  err.Error(),
+		}
+	}
+	return serializer.Response{
+		Status: code,
+		Msg:    e.GetMsg(code),
+		Data:   "修改成功",
+	}
+}
+
+func (s *DeleteTaskService) Delete(id string) serializer.Response {
+	var task model.Task
+	code := e.SUCCESS
+	err := model.DB.First(&task, id).Error
+	if err != nil {
+		util.LogrusObj.Info(err)
+		code = e.ErrorDatabase
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Error:  err.Error(),
+		}
+	}
+	err = model.DB.Delete(&task).Error
+	if err != nil {
+		util.LogrusObj.Info(err)
+		code = e.ErrorDatabase
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Error:  err.Error(),
+		}
+	}
+	return serializer.Response{
+		Status: code,
+		Msg:    e.GetMsg(code),
+	}
+}
+
 func (s *ListTaskService) List(id uint) serializer.Response {
 	var tasks []model.Task
 	var total int64
