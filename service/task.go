@@ -14,6 +14,30 @@ type CreateTaskSertice struct {
 	Status  int    `form:"status" json:"status"` //0 待办   1已完成
 }
 
+type ShowTaskService struct {
+}
+
+func (s *ShowTaskService) Show(id string) serializer.Response {
+	var task model.Task
+	code := e.SUCCESS
+	err := model.DB.First(&task, id).Error
+	if err != nil {
+		util.LogrusObj.Info(err)
+		code = e.ErrorDatabase
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Error:  err.Error(),
+		}
+	}
+	task.AddView()
+	return serializer.Response{
+		Status: code,
+		Data:   serializer.BuildTask(task),
+		Msg:    e.GetMsg(code),
+	}
+}
+
 func (s *CreateTaskSertice) Create(id uint) serializer.Response {
 	var user model.User
 	model.DB.First(&user, id)

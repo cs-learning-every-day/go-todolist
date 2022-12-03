@@ -1,6 +1,11 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"strconv"
+	"todo-list/cache"
+
+	"gorm.io/gorm"
+)
 
 type Task struct {
 	gorm.Model
@@ -14,5 +19,12 @@ type Task struct {
 }
 
 func (t *Task) View() uint64 {
-	return 0
+	countStr, _ := cache.RedisClient.Get(cache.TaskViewKey(t.ID)).Result()
+	count, _ := strconv.ParseUint(countStr, 10, 64)
+	return count
+}
+
+func (t *Task) AddView() {
+	cache.RedisClient.Incr(cache.TaskViewKey(t.ID))
+	cache.RedisClient.ZIncrBy(cache.RankKey, 1, strconv.Itoa(int(t.ID)))
 }

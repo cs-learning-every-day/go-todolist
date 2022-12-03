@@ -8,6 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func ShowTask(c *gin.Context) {
+	s := service.ShowTaskService{}
+	res := s.Show(c.Param("id"))
+	c.JSON(e.SUCCESS, res)
+}
+
 func CreateTask(c *gin.Context) {
 	s := service.CreateTaskSertice{}
 	claim, _ := util.ParseToken(c.GetHeader("Authorization"))
