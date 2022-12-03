@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func ListTasks(c *gin.Context) {
+	s := service.ListTaskService{}
+	claim, _ := util.ParseToken(c.GetHeader("Authorization"))
+	if err := c.ShouldBind(&s); err == nil {
+		res := s.List(claim.Id)
+		c.JSON(e.SUCCESS, res)
+	} else {
+		c.JSON(e.InvalidParams, ErrorResponse(err))
+		util.LogrusObj.Info(err)
+	}
+}
+
 func ShowTask(c *gin.Context) {
 	s := service.ShowTaskService{}
 	res := s.Show(c.Param("id"))

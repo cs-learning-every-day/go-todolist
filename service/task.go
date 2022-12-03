@@ -17,6 +17,24 @@ type CreateTaskSertice struct {
 type ShowTaskService struct {
 }
 
+type ListTaskService struct {
+	Limit int `form:"limit" json:"limit"`
+	Start int `form:"start" json:"start"`
+}
+
+func (s *ListTaskService) List(id uint) serializer.Response {
+	var tasks []model.Task
+	var total int64
+	if s.Limit == 0 {
+		s.Limit = 15
+	}
+	model.DB.Model(model.Task{}).Preload("User").
+		Where("uid = ?", id).Count(&total).
+		Limit(s.Limit).Offset((s.Start - 1) * s.Limit).Find(&tasks)
+	return serializer.BuildListResponse(serializer.BuildTasks(tasks), uint(total))
+
+}
+
 func (s *ShowTaskService) Show(id string) serializer.Response {
 	var task model.Task
 	code := e.SUCCESS
