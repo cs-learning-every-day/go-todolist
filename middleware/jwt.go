@@ -14,11 +14,11 @@ func JWT() gin.HandlerFunc {
 		var code int
 		var data interface{}
 		code = 200
-		token := c.GetHeader("Authorization")
-		if token == "" {
+		tokenHeader := c.GetHeader("Authorization")
+		if tokenHeader == "" {
 			code = 404
 		} else {
-			claims, err := util.ParseToken(token)
+			claims, err := util.ParseToken(tokenHeader)
 			if err != nil {
 				code = e.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt {

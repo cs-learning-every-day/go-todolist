@@ -1,8 +1,11 @@
 package util
 
 import (
+	"errors"
 	"os"
+	"strings"
 	"time"
+	"todo-list/pkg/e"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -33,8 +36,18 @@ func GenerateToken(id uint, username string, authority int) (string, error) {
 	return token, err
 }
 
-func ParseToken(token string) (*Claims, error) {
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(t *jwt.Token) (interface{}, error) {
+func ParseToken(tokenHeader string) (*Claims, error) {
+	// Bearer xxx
+	parts := strings.Split(tokenHeader, " ")
+	if len(parts) != 2 {
+		return nil, errors.New(e.GetMsg(e.ErrorAuthCheckTokenFail))
+	}
+	parts[0] = strings.TrimSpace(parts[0])
+	if parts[0] != "Bearer" {
+		return nil, errors.New(e.GetMsg(e.ErrorAuthCheckTokenFail))
+	}
+
+	tokenClaims, err := jwt.ParseWithClaims(parts[1], &Claims{}, func(t *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
 	if tokenClaims != nil {

@@ -12,3 +12,7 @@ type Task struct {
 	StartTime int64
 	EndTime   int64 `gorm:"default:0"`
 }
+
+func (t *Task) View() uint64 {
+	return 0
+}

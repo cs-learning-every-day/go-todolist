@@ -2,6 +2,7 @@ package routes
 
 import (
 	"todo-list/api"
+	"todo-list/middleware"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -20,6 +21,7 @@ func NewRouter() *gin.Engine {
 		authed := v1.Group("/")
 		authed.Use(middleware.JWT())
 		{
+			authed.POST("task", api.CreateTask)
 		}
 	}
 	return r
